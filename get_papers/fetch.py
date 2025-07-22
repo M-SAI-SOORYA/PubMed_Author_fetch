@@ -35,17 +35,20 @@ def fetch_pubmed_details(pubmed_ids: List[str]) -> List[Dict]:
     }
 
     resp = requests.get(url, params=params)
+   
     resp.raise_for_status()
-    # print(resp.content)
+   
     tree = ElementTree.fromstring(resp.content)
     
     papers = []
+    
     for article in tree.findall(".//PubmedArticle"):
         paper = {}
         
         paper["PubmedID"] = article.findtext(".//PMID")
         paper["Title"] = article.findtext(".//ArticleTitle")
         paper["PublicationDate"] = article.findtext(".//PubDate/Year") or "Unknown"
+        # print(article.findtext(".//PubDate"))
 
         paper["Authors"] = []
         
